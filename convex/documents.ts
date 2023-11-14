@@ -152,23 +152,23 @@ export const remove = mutation({
       throw new Error("Not authorized");
     }
 
-    // const recursiveRemove = async (documentId: Id<"documents">) => {
-    //   const children = await ctx.db.query("documents")
-    //     .withIndex("by_user_parent", (q) => (
-    //       q.eq("userId", userId).eq("parentDocument", documentId)
-    //     )).collect();
-    //
-    //   for (const child of children) {
-    //     await ctx.db.delete(child._id);
-    //     await recursiveRemove(child._id);
-    //   }
-    // }
-
     const document = await ctx.db.delete(args.id);
 
-    // await recursiveRemove(args.id);
-
     return document;
+  }
+});
+
+export const getSearch = query({
+  handler: async (ctx) => {
+    const userId = await getUserId(ctx);
+
+    return ctx.db.query("documents")
+      .withIndex("by_user", (q) =>
+        q.eq("userId", userId)
+      )
+      .filter((q) => q.eq(q.field("isArchived"), false))
+      .order("desc")
+      .collect();
   }
 });
 
