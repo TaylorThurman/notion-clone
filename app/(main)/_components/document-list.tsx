@@ -1,6 +1,6 @@
-import {cn} from "@/lib/utils";
+"use client";
 
-"use-client";
+import {cn} from "@/lib/utils";
 
 import {Doc, Id} from "@/convex/_generated/dataModel";
 import {useParams, useRouter} from "next/navigation";
